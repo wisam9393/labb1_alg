@@ -2,7 +2,13 @@
 #include "parser.h"
 #include "lexer.h"
 
-
+// hat kommenterat bort curent++; i rad 86
+// add more chek t.ex rad 160+ 246 to cheak size 
+/*if (curent >= tokens.size())
+	{
+	return nullptr;
+	}
+*/
 
 parser::parser(std::vector<Token> tokens):tokens(tokens)
 {
@@ -83,7 +89,7 @@ exprnode* parser::parseexpr()
 	if (child == nullptr)
 		return nullptr;
 
-	curent++;
+	//curent++;
 	
 	exprNode->operands.push_back(child);
 	return exprNode;
@@ -153,6 +159,11 @@ stringnode* parser::parsestring()
 
 	stringnode* nod = new stringnode(" ");
 	std::string ord;
+
+	if (curent >= tokens.size())
+	{
+		return nullptr;
+	}
 
 	if (tokens[curent].type != TokenType::CHAR)
 		return nullptr;
@@ -238,6 +249,10 @@ starnode* parser::parsestar(ASTNode* child1)
 dotnode* parser::parsedot()
 {
 	std::cout << "parsedot" << std::endl;
+	if (curent >= tokens.size())
+	{
+		return nullptr;
+	}
 	if (tokens[curent].type != TokenType::DOT)
 		return nullptr;
 
@@ -249,6 +264,25 @@ dotnode* parser::parsedot()
 
 
 
+ASTNode* parser::parsevalue()
+{
+	auto ch_n = parsestring();
+	if (ch_n == nullptr)
+	{
+		auto dot_nod = parsedot();
+		if (dot_nod == nullptr)
+		{
+			
+			return nullptr;
+	
+		}
+		return dot_nod;
+	}
+	return ch_n;
+}
+//
+
+/*
 valuenode* parser::parsevalue()
 {
 	valuenode* nod = new valuenode();
@@ -266,22 +300,18 @@ valuenode* parser::parsevalue()
 		curent++;
 		return nod;
 	}
-	/*
-	auto ch_n = parsestring();
-	if (ch_n == nullptr)
-	{
-		auto dot_nod = parsedot();
-		if (dot_nod == nullptr)
-		{
-			
-				return nullptr;
-			
-		}
-		return dot_nod;
-	}
-	return ch_n; */
+	 
 }
+*/
 
+/*
+if (child1->operands.size() == 0) // kolla att barn ar string, om det dot
+	{
+		nod->operands.push_back(child1);
+		return nod;
+	}
+
+*/
 ASTNode* parser::parsecount(ASTNode* child1)
 {
 	std::string nr;
@@ -304,6 +334,10 @@ ASTNode* parser::parsecount(ASTNode* child1)
 groupnode* parser::parsegroup()
 {
 	std::cout << "parsegroup" << std::endl;
+	if (curent >= tokens.size())
+	{
+		return nullptr;
+	}
 	if (tokens[curent].type != TokenType::LEFT_PAREN)
 		return nullptr;
 	curent++;

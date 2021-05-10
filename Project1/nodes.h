@@ -54,7 +54,11 @@ struct prgm :ASTNode {
 				std::cout << match << "\n\n";
 				return true;
 			}
-			begin++;
+			if (begin != end)
+			{
+				begin++;
+			}
+			
 		}
 
 		return false;
@@ -64,12 +68,43 @@ struct prgm :ASTNode {
 //expr 111
 
 struct exnode :ASTNode {
+
 	bool evaluate(iterator begin, iterator end) override {
-		return operands[0]->evaluate(begin, end);
+		 operands[0]->evaluate(begin, end);
+	    return operands[1]->evaluate(begin, end);
 	};
 
 };
 
+/*
+while (begin != end)
+			{
+				int count = 0;
+				for ( auto child : operands) {
+
+					if (child->evaluate(begin, end) == true)
+					{
+						count++;
+						//return true;
+					}
+
+				}
+				if (count == operands.size())
+				{
+					std::cout << match << "\n\n";
+					return true;
+
+				}
+				match.clear();
+
+				if (begin != end)
+				{
+					begin++;
+				}
+
+			}
+		   return false;
+		   */
 struct exprnode :ASTNode {
 	bool evaluate(iterator begin, iterator end) override {
 		return operands[0]->evaluate(begin, end);
@@ -114,7 +149,7 @@ struct stringnode :ASTNode {
 		return stav;
 	}
 };
-
+// //
 struct charnode :ASTNode {
 	char ch;
 	charnode(char ch):ch(ch) {};
@@ -175,9 +210,17 @@ struct starnode :ASTNode {
 
 struct dotnode :ASTNode {
 	bool evaluate(iterator begin, iterator end) override {
-		return false;
+		if (begin == end)
+		{
+			return false;
+		}
+		
+		match += *begin;
+		begin++;
+		return true;
+		
 	};
-
+	
 };
 
 
@@ -189,18 +232,32 @@ struct countnode :ASTNode {
 	int antal = std::stoi(nr);
 
 	bool evaluate(iterator begin, iterator end) override {
-		if (operands[0]->evaluate(begin, end) == false)
+
+		if (operands[0]->operands.size() != 0) // att det ar string
 		{
-			return false;
+			if (operands[0]->evaluate(begin, end) == false)
+			{
+				return false;
+			}
+			for (int i = 0; i < antal; i++) {
+				if (operands[0]->operands.back()->evaluate(begin, end) == false)
+
+					return false;
+			}
+			return true;
+
 		}
+
 		for (int i = 0; i < antal; i++) {
-			if(operands[0]->operands.back()->evaluate(begin, end) == false)
-			
+			if (operands[0]->evaluate(begin, end) == false)
+
 				return false;
 		}
 		return true;
+		
+		
 
-	
+
 	};
 	std::string print() override {
 		return nr;

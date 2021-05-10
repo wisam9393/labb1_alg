@@ -12,13 +12,14 @@
 	<expr> = <sub_expr> | <ignor> 
 	<sub_expr> =  <or> |  <star>  | 
 	              <count>|  <value> | <group>
-	<char> = [A-Z a-z]
+	<char> = [A-Z a-z]			  |  <dot>
 	<or> = <char> + <char>
 	<star> = <value><"*">
-	<count> = <value><"{N}">        som  <count> =  <char><{N}> | <dot><{N}>
-	<value> = <char> | <dot> |						        
+	<count> = <value><"{N}">        liksom  <count> =  <char><{N}> | <dot><{N}>
+	<value> = <string>			// | <dot>              <char><dot><"{N}">     
+	//<string> = <char> |  <char><string>	
 	<group> = <(>  <or> <)> 
-	<ignor> = <group>  <"\I">       
+	<ignor> = <group>  <"\I">        ***************
 	     	
 */
 /*
@@ -31,6 +32,9 @@
 
 */
 
+/// <summary>
+/// 
+/// </summary>
 
 class parser {
 private:
@@ -46,13 +50,12 @@ public:
 	ornode* parseor(ASTNode* child1);
 	starnode* parsestar(ASTNode* child1);
 	dotnode* parsedot();
-	valuenode* parsevalue();
+	ASTNode* parsevalue();  // valuenode* parsevalue();  ASTNode* parsevalue();
 	ASTNode* parsecount(ASTNode* child1);   // ska de vara countnode eller ASTNode??
 	groupnode* parsegroup(); // ska de vara groupnode eller ASTNode??
 	ignornode* parseignor();
 	outnode* parseout();
-}; 
-
+};
 
 #endif
 
@@ -75,3 +78,9 @@ public:
 <any> -> .
 <ignore> -> /I
 */
+
+
+
+
+
+

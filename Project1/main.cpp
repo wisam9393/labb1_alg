@@ -22,7 +22,7 @@ void printTree(ASTNode* p, int i) {
 
 int main()
 {
-    std::string txt = "Waterlooooooo I was defeated, you won the war Waterloooo promise to love you for ever more Waterloo couldn't escape if I wanted to Waterloo knowing my fate is to be with you Waterloo finally facing my Waterloo";
+    std::string txt = "Waterloooo I was defeated, you won the war Waterloooo promise to love you for ever more Waterloo couldn't escape if I wanted to Waterloo knowing my fate is to be with you Waterloo finally facing my Waterloo";
 
     std::string line;
 
